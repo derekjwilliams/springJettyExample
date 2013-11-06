@@ -13,21 +13,49 @@ import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 @Component
 public class LibraryRequestItemDao {
-
     Logger log = LoggerFactory.getLogger(this.getClass());
+    
     private static final String createTableQuery;
+    private static final String ID_COL = "id";
+    private static final String LIBRARY_REQUEST_ID_COL = "library_request_id";
+    private static final String RETRIEVE_PATH_COL = "retrieve_path";
+    private static final String SIZE_IN_BYTES_COL = "size_in_bytes";
+    private static final String LAST_MODIFIED_BY_COL = "last_modified_by";
+    private static final String LAST_MODIFIED_TIME_COL = "last_modified_time";
+
+    private static final String ALL_COLUMNS_STRING;
+    private static final List<String> ALL_COLUMNS;
+
     static {
+        ALL_COLUMNS_STRING = 
+        ID_COL + ", " +
+        LIBRARY_REQUEST_ID_COL + ", " +
+        RETRIEVE_PATH_COL + ", " +
+        SIZE_IN_BYTES_COL + ", " +
+        LAST_MODIFIED_BY_COL + ", " +
+        LAST_MODIFIED_TIME_COL;
+
+        ALL_COLUMNS = new ArrayList<String>();
+        ALL_COLUMNS.add(ID_COL);
+        ALL_COLUMNS.add(LIBRARY_REQUEST_ID_COL);
+        ALL_COLUMNS.add(RETRIEVE_PATH_COL);
+        ALL_COLUMNS.add(SIZE_IN_BYTES_COL);
+        ALL_COLUMNS.add(LAST_MODIFIED_BY_COL);
+        ALL_COLUMNS.add(LAST_MODIFIED_TIME_COL);
+
     	createTableQuery = "CREATE TABLE library_request_items (" +
-    			"id int primary key NOT NULL," +
-    			"library_request_id integer NOT NULL," +
-    			"retrieve_path varchar(512)," +
-    			"size_in_bytes bigint," +
-    			"last_modified_by varchar(50)," +
-    			"last_modified_time timestamp DEFAULT now());";
+    			ID_COL + " int primary key NOT NULL," +
+    			LIBRARY_REQUEST_ID_COL + " integer NOT NULL," +
+    			RETRIEVE_PATH_COL + " varchar(512)," +
+    			SIZE_IN_BYTES_COL + " bigint," +
+    			LAST_MODIFIED_BY_COL + " varchar(50)," +
+    			LAST_MODIFIED_TIME_COL + " timestamp DEFAULT now());";
     }
+
     @Resource
     JdbcTemplate jdbcTemplate;
 
@@ -940,19 +968,30 @@ public class LibraryRequestItemDao {
             jdbcTemplate.update("INSERT INTO library_request_items (id, library_request_id, retrieve_path, size_in_bytes, last_modified_by, last_modified_time) VALUES (54331, 19562, '/isilon/INT/content/wps/61df1526-e04f-4f27-9313-0cdbc2c7d156/james66_36613/james66_R1C1.tif', 4719084, 'myDG_User', '2013-11-01 21:39:31.038847+00');");
             jdbcTemplate.update("INSERT INTO library_request_items (id, library_request_id, retrieve_path, size_in_bytes, last_modified_by, last_modified_time) VALUES (54332, 19562, '/isilon/INT/content/wps/61df1526-e04f-4f27-9313-0cdbc2c7d156/james66_36613/james66_SEAMLINES_SHAPE.zip', 1976, 'myDG_User', '2013-11-01 21:39:31.043046+00');");
             jdbcTemplate.update("INSERT INTO library_request_items (id, library_request_id, retrieve_path, size_in_bytes, last_modified_by, last_modified_time) VALUES (54333, 19562, '/isilon/INT/content/wps/61df1526-e04f-4f27-9313-0cdbc2c7d156/james66_36613/james66_TILE_SHAPE.zip', 973, 'myDG_User', '2013-11-01 21:39:31.046045+00');");
-
-//            jdbcTemplate.execute("create table library_request_items (id int primary key,  library_request_id integer)");
         }
     }
 
-    public List<LibraryRequestItem> findAll() {
+    public List<LibraryRequestItem> findAll(int limit, int offset, String sortName, String sortOrder) {
         setupIfNotYet();
-        return jdbcTemplate.query("select * from library_request_items", mapper);
+        log.info("select * from library_request_items order by " + getColumn(sortName) + " " + getSortOrder(sortOrder) + " limit " + limit + " offset " + offset);
+
+        return jdbcTemplate.query("select " + ALL_COLUMNS_STRING + 
+            " from library_request_items order by " + getColumn(sortName) + " " + 
+            getSortOrder(sortOrder) + " limit ? offset ? ", 
+            new Object[] {limit, offset}, mapper);
+    }
+
+    private String getColumn(String candidate) {
+        return ALL_COLUMNS.contains(candidate) ? candidate : ID_COL;
+    }
+
+    private String getSortOrder(String candidate) {
+        return candidate.equalsIgnoreCase("desc") ? "DESC" : "ASC";
     }
 
     RowMapper<LibraryRequestItem> mapper = new RowMapper<LibraryRequestItem>() {
         @Override
-        public LibraryRequestItem mapRow(ResultSet resultSet, int i) throws SQLException {
+        public LibraryRequestItem mapRow(final ResultSet resultSet, final int i) throws SQLException {
             return extractor.extractData(resultSet);
         }
     };
@@ -960,9 +999,14 @@ public class LibraryRequestItemDao {
     ResultSetExtractor<LibraryRequestItem> extractor = new ResultSetExtractor<LibraryRequestItem>() {
         @Override
         public LibraryRequestItem extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-            LibraryRequestItem libraryRequestItem = new LibraryRequestItem();
-            libraryRequestItem.setId(resultSet.getInt("id"));
-            libraryRequestItem.setLibrary_request_id(resultSet.getInt("library_request_id"));
+            final LibraryRequestItem libraryRequestItem = new LibraryRequestItem();
+            libraryRequestItem.setId(resultSet.getInt(ID_COL));
+            libraryRequestItem.setSizeInBytes(resultSet.getInt(SIZE_IN_BYTES_COL));
+            libraryRequestItem.setRetrievePath(resultSet.getString(RETRIEVE_PATH_COL));
+            libraryRequestItem.setLibraryRequestId(resultSet.getInt(LIBRARY_REQUEST_ID_COL));
+            libraryRequestItem.setLastModifiedBy(resultSet.getString(LAST_MODIFIED_BY_COL));
+            libraryRequestItem.setLastModifiedTime(resultSet.getDate(LAST_MODIFIED_TIME_COL));
+
             return libraryRequestItem;
         }
     };

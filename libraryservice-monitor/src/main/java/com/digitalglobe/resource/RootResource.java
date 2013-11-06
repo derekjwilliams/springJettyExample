@@ -5,6 +5,9 @@ import com.digitalglobe.database.Member;
 import com.digitalglobe.database.MemberDao;
 import com.digitalglobe.view.MembersViewModel;
 import com.digitalglobe.database.LibraryRequest;
+import com.digitalglobe.database.TableData;
+import com.digitalglobe.database.RequestTableData;
+import com.digitalglobe.database.RequestItemTableData;
 import com.digitalglobe.database.LibraryRequestDao;
 import com.digitalglobe.view.LibraryRequestsViewModel;
 import com.digitalglobe.database.LibraryRequestItem;
@@ -37,6 +40,10 @@ import java.util.Set;
 @Component
 @Path("/")
 public class RootResource {
+    private static final String DESC = "desc";
+    private static final String ID_COL = "id";
+    private static final int PAGE_SIZE = 50;
+    private static final int START_PAGE = 1;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -53,71 +60,37 @@ public class RootResource {
     LibraryRequestItemDao libraryRequestItemDao;
 
     @GET
-    @Path("/")
-    public String index() {
-        log.info("index called!");
-        return "Hello, JAX-RS(Jersey) with Spring!";
-    }
-
-    @GET
-    @Path("/members")
-    public Viewable members() throws Exception {
-        MembersViewModel model = new MembersViewModel();
-        model.setMembers(memberDao.findAll());
-        for (Member member : model.getMembers()) {
-            log.info("member:" + member.toString());
-        }
-        // Using JSP
-        Viewable viewable = new Viewable("/members.jsp", model);
-        return viewable;
-        //return Response.ok(viewable).build();
-    }
-    
-    @GET
-    @Path("/members")
-    @Produces({"application/json", "application/xml"})
-    public List<Member> getMembers() {
-    	return memberDao.findAll();
-    }
-    
-    @GET
     @Path("/library_requests")
     @Produces({"application/json", "application/xml"})
-    public List<LibraryRequest> getLibraryRequests() {
-    	return libraryRequestDao.findAll();
+    public RequestTableData getLibraryRequests(
+            @QueryParam("rp") @DefaultValue("50") int limit, 
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("sortname") @DefaultValue("id") String sortName, 
+            @QueryParam("sortorder") @DefaultValue("desc") String sortOrder ) 
+    {
+        final RequestTableData result = new RequestTableData();
+        final TableData tableData = result.getTableData();
+        tableData.setCount(libraryRequestDao.count());
+        tableData.setPage(page);
+        result.setValues(libraryRequestDao.findAll(limit, limit * (page - 1), sortName, sortOrder));
+        return result;
     }
+
     @GET
     @Path("/library_request_items")
     @Produces({"application/json", "application/xml"})
-    public List<LibraryRequestItem> getLibraryRequestItems() throws Exception {
-    	return libraryRequestItemDao.findAll();
-    }
-
-    
-    @GET
-    @Path("/library_requests")
-    public Object libraryrequests() throws Exception {
-        LibraryRequestsViewModel model = new LibraryRequestsViewModel();
-        model.setLibraryRequests(libraryRequestDao.findAll());
-        for (LibraryRequest libraryRequestDao : model.getLibraryRequests()) {
-            log.info("libraryRequestDao:" + libraryRequestDao.toString());
-        }
-        // Using JSP
-        Viewable viewable = new Viewable("/libraryRequests.jsp", model);
-        return Response.ok(viewable).build();
-    }
-
-    @GET
-    @Path("/libraryrequestitems")
-    public Object libraryrequestitems() throws Exception {
-        LibraryRequestItemsViewModel model = new LibraryRequestItemsViewModel();
-        model.setLibraryRequestItems(libraryRequestItemDao.findAll());
-        for (LibraryRequestItem libraryRequestItemDao : model.getLibraryRequestItems()) {
-            log.info("libraryRequestItemDao:" + libraryRequestItemDao.toString());
-        }
-        // Using JSP
-        Viewable viewable = new Viewable("/libraryRequestItems.jsp", model);
-        return Response.ok(viewable).build();
+    public RequestItemTableData getLibraryRequestItems(
+            @QueryParam("rp") @DefaultValue("50") int limit, 
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("sortname") @DefaultValue("id") String sortName, 
+            @QueryParam("sortorder") @DefaultValue("desc") String sortOrder ) 
+    {
+        final RequestItemTableData result = new RequestItemTableData();
+        final TableData tableData = result.getTableData();
+        tableData.setCount(libraryRequestDao.count());
+        tableData.setPage(page);
+        result.setValues(libraryRequestItemDao.findAll(limit, limit * (page - 1), sortName, sortOrder));
+        return result;
     }
 
     @GET
@@ -132,46 +105,9 @@ public class RootResource {
     @GET
     @Path("/post/input")
     public Object postInput() {
-        // Using JSP
         return Response.ok(new Viewable("/post/input.jsp")).build();
     }
 
     @Resource
     Validator validator;
-
-    @POST
-    @Path("/post/submit")
-    public Object postSubmit(@FormParam("id") String id,
-                             @FormParam("password") String password) {
-
-        log.info("@FormParam(\"id\"): " + id);
-        log.info("@FormParam(\"password\"): " + password);
-
-        // validation
-        PostSubmitParams params = new PostSubmitParams(id, password);
-        Set<ConstraintViolation<PostSubmitParams>> violations = validator.validate(params);
-        if (!violations.isEmpty()) {
-            log.debug("Validation failed : " + violations.size());
-            for (ConstraintViolation<PostSubmitParams> v : violations) {
-                log.debug(v.getPropertyPath().toString() + " " + v.getMessage());
-            }
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        return "Posted: id=" + id + ",password=" + password;
-
-    }
-
-    public static class PostSubmitParams {
-        public PostSubmitParams(String id, String password) {
-            this.id = id;
-            this.password = password;
-        }
-
-        @NotEmpty
-        public String id;
-        @NotEmpty
-        public String password;
-    }
-
 }

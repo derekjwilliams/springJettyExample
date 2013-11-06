@@ -20,8 +20,6 @@ public class RootResourceTest extends RollbackTestCase {
 
     @Test
     public void index() throws Exception {
-        String actual = resource.index();
-        assertThat(actual, is(equalTo("Hello, JAX-RS(Jersey) with Spring!")));
     }
 
 }

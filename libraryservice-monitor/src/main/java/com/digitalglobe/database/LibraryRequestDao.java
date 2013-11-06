@@ -12,28 +12,67 @@ import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 @Component
 public class LibraryRequestDao {
-
     Logger log = LoggerFactory.getLogger(this.getClass());
-    private static final String createTableQuery;
     
-    static {
-    	createTableQuery = "CREATE TABLE library_request (" +
-    		    "id int primary key NOT NULL," +
-    		    "name varchar(64) NOT NULL," +
-    		    "status varchar(32) NOT NULL," +
-    		    "request_timestamp timestamp DEFAULT now() NOT NULL," +
-    		    "member_user_id integer," +
-    		    "member_account_id integer NOT NULL," +
-    		    "request_options text," +
-    		    "wps_status_url varchar(512)," +
-    		    "last_modified_by varchar(50)," +
-    		    "last_modified_time timestamp DEFAULT now()," +
-    		    "percent_complete integer DEFAULT (-1) NOT NULL);";
-    		
+    private static final String createTableQuery;
+    private static final String ID_COL = "id";
+    private static final String NAME_COL = "name";
+    private static final String STATUS_COL = "status";
+    private static final String REQ_TIMESTAMP_COL = "request_timestamp";
+    private static final String MEMBER_USER_ID_COL = "member_user_id";
+    private static final String MEMBER_ACCOUNT_ID_COL = "member_account_id";
+    private static final String REQUEST_OPTIONS_COL = "request_options";
+    private static final String WPS_STATUS_URL_COL = "wps_status_url";
+    private static final String LAST_MODIFIED_BY_COL = "last_modified_by";
+    private static final String LAST_MODIFIED_TIME_COL = "last_modified_time";
+    private static final String PERCENT_COMPLETE_COL = "percent_complete";
 
+    private static final String ALL_COLUMNS_STRING;
+    private static final List<String> ALL_COLUMNS;
+
+    static {
+        ALL_COLUMNS_STRING = 
+        ID_COL + ", " +
+        NAME_COL + ", " +
+        STATUS_COL + ", " +
+        REQ_TIMESTAMP_COL + ", " +
+        MEMBER_USER_ID_COL + ", " +
+        MEMBER_ACCOUNT_ID_COL + ", " +
+        REQUEST_OPTIONS_COL + ", " +
+        WPS_STATUS_URL_COL + ", " +
+        LAST_MODIFIED_BY_COL + ", " +
+        LAST_MODIFIED_TIME_COL + ", " +
+        PERCENT_COMPLETE_COL;
+
+        ALL_COLUMNS = new ArrayList<String>();
+        ALL_COLUMNS.add(ID_COL);
+        ALL_COLUMNS.add(NAME_COL);
+        ALL_COLUMNS.add(STATUS_COL);
+        ALL_COLUMNS.add(REQ_TIMESTAMP_COL);
+        ALL_COLUMNS.add(MEMBER_USER_ID_COL);
+        ALL_COLUMNS.add(MEMBER_ACCOUNT_ID_COL);
+        ALL_COLUMNS.add(REQUEST_OPTIONS_COL);
+        ALL_COLUMNS.add(WPS_STATUS_URL_COL);
+        ALL_COLUMNS.add(LAST_MODIFIED_BY_COL);
+        ALL_COLUMNS.add(LAST_MODIFIED_TIME_COL);
+        ALL_COLUMNS.add(PERCENT_COMPLETE_COL);
+
+    	createTableQuery = "CREATE TABLE library_request (" +
+    		    ID_COL + " int primary key NOT NULL," +
+                NAME_COL + " varchar(64) NOT NULL," +
+                STATUS_COL + " varchar(32) NOT NULL," +
+                REQ_TIMESTAMP_COL + " timestamp DEFAULT now() NOT NULL," +
+                MEMBER_USER_ID_COL + " integer," +
+                MEMBER_ACCOUNT_ID_COL + " integer NOT NULL," +
+                REQUEST_OPTIONS_COL + " text," +
+                WPS_STATUS_URL_COL + " varchar(512)," +
+                LAST_MODIFIED_BY_COL + " varchar(50)," +
+                LAST_MODIFIED_TIME_COL + "  timestamp DEFAULT now()," +
+                PERCENT_COMPLETE_COL + "  integer DEFAULT (-1) NOT NULL);";
     }
     @Resource
     JdbcTemplate jdbcTemplate;
@@ -289,19 +328,34 @@ public class LibraryRequestDao {
             jdbcTemplate.update("INSERT INTO library_request VALUES (19551, 'waiting4sacking', 'Completed', '2013-11-01 20:36:32.992+00', 37215, 31850, 'name=waiting4sacking;format=0;tileSize=1;resolution=0;projection=0;interpolation=2;compression=1;bbox=-77.1457061767565,38.8834367494068,-77.03584289550584,38.93392921175628;featureIds=53b616eaf2a74603c707d2b6a4bd7ddc', 'http://biwsapplgmt03.ux.dg.local:8086/wpsservice/wpsaccess?service=WPS&version=1.0.0&request=GetExecutionStatus&executionId=db392056-fc18-46ad-b7ea-7945d1b1c00d&connectid=987660ae-c3cf-4196-8380-357f2e980868&instanceid=2594b19974d371828e31adb226ff9b61', NULL, '2013-11-01 20:35:44.597667+00', 90);");
             jdbcTemplate.update("INSERT INTO library_request VALUES (17625, 'Annapolis', 'Errored', '2013-07-11 14:40:28.903+00', 37403, 31874, 'name=Annapolis;format=1;tileSize=3;resolution=0;projection=0;interpolation=1;compression=0;bbox=-76.745306015024,38.877299896407,-76.379152297983,39.003741403144;featureIds=6304ea664043bd2ee446648c0c4d2c34', 'http://biwsapplgmt03.ux.dg.local:8086/wpsservice/wpsaccess?service=WPS&version=1.0.0&request=GetExecutionStatus&executionId=2c98a667-9e8f-4ea2-a806-fc1694c0389a&connectid=71584532-3fd5-4fe2-b8d4-9ed9fae24764&instanceid=2594b19974d371828e31adb226ff9b61', 'AUTO_SYSTEM_DELETE', '2013-10-26 07:31:53.955386+00', 0);");
             jdbcTemplate.update("INSERT INTO library_request VALUES (17628, 'Rio_Grande', 'Errored', '2013-07-11 14:40:28.18+00', 37403, 31874, 'name=Rio_Grande;format=1;tileSize=3;resolution=0;projection=0;interpolation=1;compression=0;bbox=-67.880025863654,-54.091666340091,-67.513872146613,-53.99621495796;featureIds=dd415c0a43a35a6155f5504a94711b88', 'http://biwsapplgmt03.ux.dg.local:8086/wpsservice/wpsaccess?service=WPS&version=1.0.0&request=GetExecutionStatus&executionId=b223f83c-37b7-4739-8e76-8ab1261de040&connectid=71584532-3fd5-4fe2-b8d4-9ed9fae24764&instanceid=2594b19974d371828e31adb226ff9b61', 'AUTO_SYSTEM_DELETE', '2013-10-26 07:31:53.961293+00', 0);");
-
-//            jdbcTemplate.execute("create table library_request (id int primary key, name varchar(64) NOT NULL, status varchar(32))");
         }
     }
 
-    public List<LibraryRequest> findAll() {
+    public List<LibraryRequest> findAll(final int limit, final int offset, final String sortName, final String sortOrder) {
         setupIfNotYet();
-        return jdbcTemplate.query("select * from library_request", mapper);
+        log.info("select * from library_request order by " + getColumn(sortName) + " " + getSortOrder(sortOrder) + " limit " + limit + " offset " + offset);
+        return jdbcTemplate.query("select " + ALL_COLUMNS_STRING + 
+            " from library_request order by " + getColumn(sortName) + " " + 
+            getSortOrder(sortOrder) + " limit ? offset ? ", 
+            new Object[] {limit, offset}, mapper);
+    }
+
+    private String getColumn(final String candidate) {
+        return ALL_COLUMNS.contains(candidate) ? candidate : ID_COL;
+    }
+
+    private static String getSortOrder(final String candidate) {
+        return candidate.equalsIgnoreCase("desc") ? "DESC" : "ASC";
+    }
+
+    public Integer count() {
+        setupIfNotYet();
+        return jdbcTemplate.queryForObject("select count(*) from library_request", Integer.class);
     }
 
     RowMapper<LibraryRequest> mapper = new RowMapper<LibraryRequest>() {
         @Override
-        public LibraryRequest mapRow(ResultSet resultSet, int i) throws SQLException {
+        public LibraryRequest mapRow(final ResultSet resultSet, final int i) throws SQLException {
             return extractor.extractData(resultSet);
         }
     };
@@ -309,10 +363,17 @@ public class LibraryRequestDao {
     ResultSetExtractor<LibraryRequest> extractor = new ResultSetExtractor<LibraryRequest>() {
         @Override
         public LibraryRequest extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-            LibraryRequest libraryRequest = new LibraryRequest();
-            libraryRequest.setId(resultSet.getInt("id"));
-            libraryRequest.setName(resultSet.getString("name"));
-            libraryRequest.setStatus(resultSet.getString("status"));
+            final LibraryRequest libraryRequest = new LibraryRequest();
+            libraryRequest.setId(resultSet.getInt(ID_COL));
+            libraryRequest.setName(resultSet.getString(NAME_COL));
+            libraryRequest.setStatus(resultSet.getString(STATUS_COL));
+            libraryRequest.setRequestTimestamp(resultSet.getDate(REQ_TIMESTAMP_COL));
+            libraryRequest.setMemberUserId(resultSet.getInt(MEMBER_USER_ID_COL));
+            libraryRequest.setMemberAccountId(resultSet.getInt(MEMBER_ACCOUNT_ID_COL));
+            libraryRequest.setRequestOptions(resultSet.getString(REQUEST_OPTIONS_COL));
+            libraryRequest.setWpsStatusUrl(resultSet.getString(WPS_STATUS_URL_COL));
+            libraryRequest.setLastModifiedBy(resultSet.getString(LAST_MODIFIED_BY_COL));
+            libraryRequest.setLastModifiedTime(resultSet.getDate(LAST_MODIFIED_TIME_COL));
             return libraryRequest;
         }
     };
