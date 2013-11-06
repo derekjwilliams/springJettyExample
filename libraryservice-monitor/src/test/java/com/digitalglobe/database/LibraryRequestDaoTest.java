@@ -21,7 +21,7 @@ public class LibraryRequestDaoTest extends RollbackTestCase {
 
     @Test
     public void findAll() throws Exception {
-        List<LibraryRequest> actual = dao.findAll(50, 0);
+        List<LibraryRequest> actual = dao.findAll(50, 0, "id", "desc");
         assertThat(actual.size(), is(equalTo(0)));
     }
 
