@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Mon Nov 04 03:05:48 MST 2013:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-0142-2293-4cee-0000082a4040 
-on database directory /home/derek/development/gorillaLogic/digitalglobe/libraryservice-monitor/db  with class loader ContextLoader@null 
-Loaded from file:/home/derek/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_25-b30
-user.dir=/home/derek/development/gorillaLogic/digitalglobe/libraryservice-monitor
+Tue Nov 05 11:21:59 MST 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-0142-297f-ef77-000008ff66f0 
+on database directory /home/dwilliam/development/github/springJettyExample/libraryservice-monitor/db  with class loader sun.misc.Launcher$AppClassLoader@63c78e57 
+Loaded from file:/dg/repo/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Sun Microsystems Inc.
+java.runtime.version=1.6.0_43-b01
+user.dir=/home/dwilliam/development/github/springJettyExample/libraryservice-monitor
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
