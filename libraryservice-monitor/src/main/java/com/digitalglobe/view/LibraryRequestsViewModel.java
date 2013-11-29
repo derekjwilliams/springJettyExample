@@ -1,6 +1,6 @@
 package com.digitalglobe.view;
 
-import com.digitalglobe.database.LibraryRequest;
+import com.digitalglobe.librarymonitor.database.LibraryRequest;
 
 import java.util.List;
 

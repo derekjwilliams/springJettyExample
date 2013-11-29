@@ -1,4 +1,4 @@
-package com.digitalglobe.database;
+package com.digitalglobe.librarymonitor.database;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

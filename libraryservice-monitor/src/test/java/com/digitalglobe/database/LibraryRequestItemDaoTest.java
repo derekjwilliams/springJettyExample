@@ -1,9 +1,13 @@
 package com.digitalglobe.database;
 
 import com.digitalglobe.RollbackTestCase;
+import com.digitalglobe.librarymonitor.database.LibraryRequestItem;
+import com.digitalglobe.librarymonitor.database.LibraryRequestItemDao;
+
 import org.junit.Test;
 
 import javax.annotation.Resource;
+
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;

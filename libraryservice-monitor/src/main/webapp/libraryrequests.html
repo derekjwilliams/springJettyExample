@@ -12,7 +12,51 @@
 </head>
 <body>
     <header><h3>Library Requests</h3></header>
-    <div class="headerName-fluid"></div>
+
+    <table style="width:100%">
+        <tr>
+            <td>
+                <table id="filters-table">
+                </table>
+            </td>
+            <td class="add-filter">
+                <label for="add_filter_select">Add filter</label>
+                <select id="add_filter_select"><option value=""></option>
+                    <option value="status_id">Status</option>
+                    <option value="tracker_id">Tracker</option>
+                    <option value="priority_id">Priority</option>
+                    <option value="assigned_to_id">Assignee</option>
+                    <option value="author_id">Author</option>
+                    <option value="assigned_to_role">Assignee&#x27;s role</option>
+                    <option value="subject">Subject</option>
+                    <option value="created_on">Created</option>
+                    <option value="updated_on">Updated</option>
+                    <option value="start_date">Start date</option>
+                    <option value="due_date">Due date</option>
+                    <option value="estimated_hours">Estimated time</option>
+                    <option value="done_ratio">% Done</option>
+                    <option value="watcher_id">Watcher</option>
+                    <option value="is_private">Private</option>
+                    <option value="relates">Related to</option>
+                    <option value="duplicates">Duplicates</option>
+                    <option value="duplicated">Duplicated by</option>
+                    <option value="blocks">Blocks</option>
+                    <option value="blocked">Blocked by</option>
+                    <option value="precedes">Precedes</option>
+                    <option value="follows">Follows</option>
+                    <option value="copied_to">Copied to</option>
+                    <option value="copied_from">Copied from</option></select>
+                </td>
+            </tr>
+        </table>  
+
+        <p class="buttons hide-when-print">
+            <a class="icon icon-checked" onclick="submit_query_form('query_form''); return false;" href="#">Apply</a>
+            <a class="icon icon-reload" href="/redmine/projects/geoserver/issues?set_filter=1">Clear</a>
+            <a class="icon icon-save" onclick="$('#query_form').attr('action', '/redmine/projects/geoserver/queries/new'); submit_query_form('query_form'); return false;" href="#">Save</a>
+        </p>
+
+        <div class="headerName-fluid"></div>
 	<table id="flex1"></table>
 	<script src="./scripts/libraryrequests.js"></script>
 </body>

@@ -1,6 +1,8 @@
 package com.digitalglobe.resource;
 
 import com.digitalglobe.RollbackTestCase;
+import com.digitalglobe.librarymonitor.resource.RootResource;
+
 import org.junit.Test;
 
 import javax.annotation.Resource;

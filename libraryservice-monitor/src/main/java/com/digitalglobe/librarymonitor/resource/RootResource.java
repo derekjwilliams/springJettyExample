@@ -1,17 +1,17 @@
-package com.digitalglobe.resource;
+package com.digitalglobe.librarymonitor.resource;
 
 import com.sun.jersey.api.view.Viewable;
-import com.digitalglobe.database.Member;
-import com.digitalglobe.database.MemberDao;
 import com.digitalglobe.view.MembersViewModel;
-import com.digitalglobe.database.LibraryRequest;
-import com.digitalglobe.database.TableData;
-import com.digitalglobe.database.RequestTableData;
-import com.digitalglobe.database.RequestItemTableData;
-import com.digitalglobe.database.LibraryRequestDao;
 import com.digitalglobe.view.LibraryRequestsViewModel;
-import com.digitalglobe.database.LibraryRequestItem;
-import com.digitalglobe.database.LibraryRequestItemDao;
+import com.digitalglobe.librarymonitor.database.LibraryRequest;
+import com.digitalglobe.librarymonitor.database.LibraryRequestDao;
+import com.digitalglobe.librarymonitor.database.LibraryRequestItem;
+import com.digitalglobe.librarymonitor.database.LibraryRequestItemDao;
+import com.digitalglobe.librarymonitor.database.Member;
+import com.digitalglobe.librarymonitor.database.MemberDao;
+import com.digitalglobe.librarymonitor.database.RequestItemTableData;
+import com.digitalglobe.librarymonitor.database.RequestTableData;
+import com.digitalglobe.librarymonitor.database.TableData;
 import com.digitalglobe.view.LibraryRequestItemsViewModel;
 
 import org.hibernate.validator.constraints.NotEmpty;

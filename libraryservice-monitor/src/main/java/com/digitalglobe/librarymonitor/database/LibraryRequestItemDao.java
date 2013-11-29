@@ -1,4 +1,4 @@
-package com.digitalglobe.database;
+package com.digitalglobe.librarymonitor.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,8 @@
 package com.digitalglobe.database;
 
 import com.digitalglobe.BasicSpringTestCase;
+import com.digitalglobe.librarymonitor.database.LibraryRequestItem;
+
 import org.junit.Test;
 
 import javax.annotation.Resource;

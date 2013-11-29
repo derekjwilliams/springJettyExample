@@ -1,4 +1,4 @@
-package com.digitalglobe.database;
+package com.digitalglobe.librarymonitor.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -335,7 +335,9 @@ public class LibraryRequestDao {
         setupIfNotYet();
         log.info("select * from library_request order by " + getColumn(sortName) + " " + getSortOrder(sortOrder) + " limit " + limit + " offset " + offset);
         return jdbcTemplate.query("select " + ALL_COLUMNS_STRING + 
-            " from library_request order by " + getColumn(sortName) + " " + 
+            " from library_request " + 
+           //" where " + REQ_TIMESTAMP_COL + " > " + "?" +
+            " order by " + getColumn(sortName) + " " + 
             getSortOrder(sortOrder) + " limit ? offset ? ", 
             new Object[] {limit, offset}, mapper);
     }

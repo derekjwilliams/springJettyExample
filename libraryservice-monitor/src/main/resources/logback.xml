@@ -9,7 +9,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.digitalglobe">
+    <logger name="com.digitalglobe.librarymonitor">
         <level value="info"/>
     </logger>
 
